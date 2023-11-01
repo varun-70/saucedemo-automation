@@ -55,6 +55,9 @@ public class HomePage {
     @FindBy(id = "continue-shopping")
     public WebElement continueShoppingButton;
 
+    @FindBy(xpath = "//*[@id=\"header_container\"]/div[2]/span")
+    public WebElement productstext;
+
 
     // Utilization ---------------------------------------------
     public void clickShoppingCartLink() {
@@ -69,17 +72,19 @@ public class HomePage {
         }
     }
 
-    /** @param addToCartElementNumber to click on it  */
+    /**
+     * @param addToCartElementNumber to click on it
+     */
     public void clickAddToCartButton(int addToCartElementNumber) {
-        addToCartButton.get(addToCartElementNumber-1).click();
+        addToCartButton.get(addToCartElementNumber - 1).click();
     }
 
     public void clickRemoveButton(int removeElementNumber) {
-        removeButton.get(removeElementNumber-1).click();
+        removeButton.get(removeElementNumber - 1).click();
     }
 
     public void assertWrongNavigationError() {
-        Assert.assertEquals(wrongNavigationError.getText(),"Epic sadface: You can only access '/inventory.html' when you are logged in.");
+        Assert.assertEquals(wrongNavigationError.getText(), "Epic sadface: You can only access '/inventory.html' when you are logged in.");
     }
 
     public void assertCopyRightLabel() {
@@ -94,7 +99,7 @@ public class HomePage {
 
     public boolean asserSortByPrice(sorting sortBy) {
         double[] itemPrices = new double[itemPrice.size()];
-        for (int i=0; i<itemPrice.size(); i++) {
+        for (int i = 0; i < itemPrice.size(); i++) {
             itemPrices[i] = getItemPrice(i);
         }
 
@@ -109,22 +114,24 @@ public class HomePage {
         return true;
     }
 
-    /** @param itemNameElementNumber to get the text */
+    /**
+     * @param itemNameElementNumber to get the text
+     */
     public String getItemName(int itemNameElementNumber) {
         return itemPrice.get(itemNameElementNumber).getText();
     }
 
     public boolean assertSortByItemName(sorting sortBy) {
         String[] itemNames = new String[itemName.size()];
-        for (int i=0; i<itemName.size(); i++) {
+        for (int i = 0; i < itemName.size(); i++) {
             itemNames[i] = itemName.get(i).getText();
         }
 
         for (int i = 0; i < itemNames.length - 1; i++) {
-            if (itemNames[i].compareTo(itemNames[i + 1]) > 0 && sortBy==sorting.Name_A_to_Z) {
+            if (itemNames[i].compareTo(itemNames[i + 1]) > 0 && sortBy == sorting.Name_A_to_Z) {
                 return false;
             }
-            if (itemNames[i].compareTo(itemNames[i + 1]) < 0 && sortBy==sorting.Name_Z_to_A) {
+            if (itemNames[i].compareTo(itemNames[i + 1]) < 0 && sortBy == sorting.Name_Z_to_A) {
                 return false;
             }
         }
@@ -167,6 +174,10 @@ public class HomePage {
 
     public void clickLinkedInSocialLink() {
         linkedInSocialLink.click();
+    }
+
+    public String getProductSectionText() {
+        return productstext.getText();
     }
 
     // Initialization ------------
