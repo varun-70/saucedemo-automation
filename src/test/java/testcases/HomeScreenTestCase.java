@@ -2,6 +2,7 @@ package testcases;
 
 import base.BaseClass;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeScreenTestCase extends BaseClass {
+
+    WebDriver driver;
     HomePage homePage;
     HelperUtil helperUtil;
     SoftAssert softAssert;
@@ -41,11 +44,11 @@ public class HomeScreenTestCase extends BaseClass {
     public void visualTest() {
 
     }
-    
+
     @Test
     public void addToCartTest() {
         int addToCartButtonsCount = homePage.addToCartButton.size();
-        for (int i=0; i<addToCartButtonsCount; i++) {
+        for (int i = 0; i < addToCartButtonsCount; i++) {
             homePage.clickAddToCartButton(1);
         }
 
@@ -54,11 +57,11 @@ public class HomeScreenTestCase extends BaseClass {
         homePage.clickContinueShoppingButton();
 
         int removeButtonCount = homePage.removeButton.size();
-        for (int i=0; i<removeButtonCount; i++) {
+        for (int i = 0; i < removeButtonCount; i++) {
             homePage.clickRemoveButton(1);
         }
         homePage.clickShoppingCartLink();
-        Assert.assertEquals(homePage.cartQuantity.size(),0);
+        Assert.assertEquals(homePage.cartQuantity.size(), 0);
         homePage.clickContinueShoppingButton();
     }
 
@@ -101,7 +104,7 @@ public class HomeScreenTestCase extends BaseClass {
         homePage.assertCopyRightLabel();
     }
 
-    @Test (enabled = false)
+    @Test(enabled = false)
     public void performanceTest() {
 //        homePage.setSortingDropDown(HomePage.sorting.Name_A_to_Z);
 //        softAssert.assertTrue(homePage.assertSortByItemName(HomePage.sorting.Name_A_to_Z));
