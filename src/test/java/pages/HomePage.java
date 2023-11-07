@@ -14,7 +14,7 @@ public class HomePage {
 
     // Declaration -----------------------------------------------
     @FindBy(css = "a[class^='shopping']")
-    WebElement linkShoppingCart;
+    public WebElement linkShoppingCart;
 
     @FindBy(css = "select[class='product_sort_container']")
     WebElement sortingDropDown;
@@ -29,13 +29,13 @@ public class HomePage {
     public List<WebElement> removeButton;
 
     @FindBy(xpath = "//a[.='Twitter']")
-    WebElement twitterSocialLink;
+    public WebElement twitterSocialLink;
 
     @FindBy(xpath = "//a[.='Facebook']")
-    WebElement facebookSocialLink;
+    public WebElement facebookSocialLink;
 
     @FindBy(xpath = "//a[.='LinkedIn']")
-    WebElement linkedInSocialLink;
+    public WebElement linkedInSocialLink;
 
     @FindBy(css = "div[class='footer_copy']")
     WebElement copyRightLabel;

@@ -2,7 +2,6 @@ package testcases;
 
 import base.BaseClass;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -10,23 +9,24 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import pages.HomePage;
 import util.HelperUtil;
+import util.ImageComparison;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeScreenTestCase extends BaseClass {
-
-    WebDriver driver;
     HomePage homePage;
     HelperUtil helperUtil;
     SoftAssert softAssert;
+    ImageComparison imageComparison;
 
     @BeforeClass
     void initialize() {
         homePage = new HomePage(driver);
         helperUtil = new HelperUtil(driver);
         softAssert = new SoftAssert();
+        imageComparison = new ImageComparison(driver);
     }
 
     @BeforeMethod
@@ -40,9 +40,15 @@ public class HomeScreenTestCase extends BaseClass {
         helperUtil.turnOnImplicitWaits(Duration.ofSeconds(10));
     }
 
+    /** To perform visual assertion on the shopping cart with and without any items in cart, and social links */
     @Test
     public void visualTest() {
-
+        imageComparison.imageComparisonAshot(ImageComparison.imageName.cart_icon_without_items_in_cart.toString(), homePage.linkShoppingCart);
+        homePage.clickAddToCartButton(1);
+        imageComparison.imageComparisonAshot(ImageComparison.imageName.cart_icon_with_one_item.toString(), homePage.linkShoppingCart);
+        imageComparison.imageComparisonAshot(ImageComparison.imageName.twitter_social_icon.toString(), homePage.twitterSocialLink);
+        imageComparison.imageComparisonAshot(ImageComparison.imageName.facebook_social_icon.toString(), homePage.facebookSocialLink);
+        imageComparison.imageComparisonAshot(ImageComparison.imageName.linkedin_social_icon.toString(), homePage.linkedInSocialLink);
     }
 
     @Test
@@ -106,29 +112,7 @@ public class HomeScreenTestCase extends BaseClass {
 
     @Test(enabled = false)
     public void performanceTest() {
-//        homePage.setSortingDropDown(HomePage.sorting.Name_A_to_Z);
-//        softAssert.assertTrue(homePage.assertSortByItemName(HomePage.sorting.Name_A_to_Z));
-//
-//        homePage.setSortingDropDown(HomePage.sorting.Name_Z_to_A);
-//        softAssert.assertTrue(homePage.assertSortByItemName(HomePage.sorting.Name_Z_to_A));
-//
-//        homePage.setSortingDropDown(HomePage.sorting.Price_low_to_high);
-//        softAssert.assertTrue(homePage.asserSortByPrice(HomePage.sorting.Price_low_to_high));
-//
-//        homePage.setSortingDropDown(HomePage.sorting.Price_high_to_low);
-//        softAssert.assertTrue(homePage.asserSortByPrice(HomePage.sorting.Price_high_to_low));
-//
-//        homePage.clickShoppingCartLink();
-//        try {
-//            helperUtil.turnOnImplicitWaits(Duration.ofSeconds(2));
-//            homePage.continueShoppingButton.isDisplayed();
-//        } catch (NoSuchElementException e) {
-//            softAssert.fail("Cart page is not displayed within 2 seconds");
-//            helperUtil.turnOnImplicitWaits(Duration.ofSeconds(10));
-//        }
-//        homePage.clickContinueShoppingButton();
-//
-//        homePage.clickContinueShoppingButton();
+        // Write your code here
     }
 
     void assertSocialLinkNavigationTest(String expectedLink) {
