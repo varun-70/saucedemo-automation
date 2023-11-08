@@ -23,7 +23,7 @@ public class ExtentReportTestNG implements IReporter {
     public static ExtentReports getReporterObject() {
         String path = System.getProperty("user.dir") + "/reports/report.html";
         ExtentSparkReporter reporter = new ExtentSparkReporter(path);
-        reporter.config().setReportName("csc-Automation");
+        reporter.config().setReportName("Sauce Lab");
         reporter.config().setDocumentTitle("Test Results");
 
         extent = new ExtentReports();
