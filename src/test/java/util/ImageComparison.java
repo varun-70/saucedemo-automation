@@ -1,5 +1,6 @@
 package util;
 
+import com.aventstack.extentreports.Status;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
@@ -7,6 +8,7 @@ import org.openqa.selenium.WebElement;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.comparison.ImageDiff;
 import ru.yandex.qatools.ashot.comparison.ImageDiffer;
+import util.extentReport.Logs;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -50,12 +52,16 @@ public class ImageComparison {
                 try {
                     ImageIO.write(diff.getMarkedImage(),"PNG",new File(System.getProperty("user.dir") +
                             "/src/test/resources/imageComparison/differenceImage/" + fileName + "_diff.png"));
+                    fail();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
+                } catch (AssertionError e) {
+                    Logs.logImage(Status.FAIL, "Visual Assertion failed", new File(System.getProperty("user.dir") +
+                            "/src/test/resources/imageComparison/differenceImage/" + fileName + "_diff.png"));
+                    fail("Visual Assertion, Image did not pass the visual assertion");
                 }
-                fail("Visual Assertion, Image did not pass the visual assertion");
             } else if (!diff.hasDiff()) {
-                System.out.println("Image comparison passed");
+                Logs.log("Image comparison passed");
             }
         }
     }

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
+    <listeners>
+        <listener class-name="util.Listener"/>
+    </listeners>
     <test verbose="2" preserve-order="true" name="/Users/deepverma/IdeaProjects/saucedemo-automation">
         <classes>
-            <class name="testcases.LoginScreenTestCase">
-
-            </class>
+            <class name="testcases.LoginScreenTestCase"/>
+            <class name="testcases.HomeScreenTestCase"/>
         </classes>
     </test>
 </suite>
