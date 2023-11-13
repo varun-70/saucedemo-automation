@@ -10,6 +10,7 @@ import org.testng.asserts.SoftAssert;
 import pages.HomePage;
 import util.HelperUtil;
 import util.ImageComparison;
+import util.NavigationToScreensUtil;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class HomeScreenTestCase extends BaseClass {
     HelperUtil helperUtil;
     SoftAssert softAssert;
     ImageComparison imageComparison;
+    NavigationToScreensUtil navigationToScreensUtil;
 
     @BeforeClass
     void initialize() {
@@ -27,24 +29,19 @@ public class HomeScreenTestCase extends BaseClass {
         helperUtil = new HelperUtil(driver);
         softAssert = new SoftAssert();
         imageComparison = new ImageComparison(driver);
+        navigationToScreensUtil = new NavigationToScreensUtil(driver);
     }
 
     @BeforeMethod
     void preRequisite() {
-        helperUtil.turnOnImplicitWaits(Duration.ofSeconds(1));
-        if (!homePage.isHomePageDisplayed()) {
-            driver.findElement(By.id("user-name")).sendKeys("standard_user");
-            driver.findElement(By.id("password")).sendKeys("secret_sauce");
-            driver.findElement(By.id("login-button")).click();
-        }
-        helperUtil.turnOnImplicitWaits(Duration.ofSeconds(10));
+        navigationToScreensUtil.navigateToScreen(NavigationToScreensUtil.screenName.Home);
     }
 
     /** To perform visual assertion on the shopping cart with and without any items in cart, and social links */
     @Test
     public void visualTest() {
         imageComparison.imageComparisonAshot(ImageComparison.imageName.cart_icon_without_items_in_cart.toString(), homePage.linkShoppingCart);
-        homePage.clickAddToCartButton(1);
+        homePage.clickAddToCartButton(0);
         imageComparison.imageComparisonAshot(ImageComparison.imageName.cart_icon_with_one_item.toString(), homePage.linkShoppingCart);
         imageComparison.imageComparisonAshot(ImageComparison.imageName.twitter_social_icon.toString(), homePage.twitterSocialLink);
         imageComparison.imageComparisonAshot(ImageComparison.imageName.facebook_social_icon.toString(), homePage.facebookSocialLink);
@@ -55,7 +52,7 @@ public class HomeScreenTestCase extends BaseClass {
     public void addToCartTest() {
         int addToCartButtonsCount = homePage.addToCartButton.size();
         for (int i = 0; i < addToCartButtonsCount; i++) {
-            homePage.clickAddToCartButton(1);
+            homePage.clickAddToCartButton(0);
         }
 
         homePage.clickShoppingCartLink();
