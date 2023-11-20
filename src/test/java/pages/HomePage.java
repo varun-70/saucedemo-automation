@@ -55,8 +55,8 @@ public class HomePage {
     @FindBy(id = "continue-shopping")
     public WebElement continueShoppingButton;
 
-    @FindBy(xpath = "//*[@id=\"header_container\"]/div[2]/span")
-    public WebElement productstext;
+    @FindBy(xpath = "//span[.='Products']")
+    public WebElement productsText;
 
 
     // Utilization ---------------------------------------------
@@ -76,7 +76,7 @@ public class HomePage {
      * @param addToCartElementNumber to click on it
      */
     public void clickAddToCartButton(int addToCartElementNumber) {
-        addToCartButton.get(addToCartElementNumber - 1).click();
+        addToCartButton.get(addToCartElementNumber).click();
     }
 
     public void clickRemoveButton(int removeElementNumber) {
@@ -91,10 +91,9 @@ public class HomePage {
         Assert.assertEquals(copyRightLabel.getText(), "© 2023 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy");
     }
 
-    public double getItemPrice(int i) {
+    public float getItemPrice(int i) {
         String priceInString = itemPrice.get(i).getText();
-        String[] priceInArray = priceInString.split("\\$");
-        return Double.parseDouble(priceInArray[1]);
+        return Float.parseFloat(priceInString.substring(1));
     }
 
     public boolean asserSortByPrice(sorting sortBy) {
@@ -118,7 +117,11 @@ public class HomePage {
      * @param itemNameElementNumber to get the text
      */
     public String getItemName(int itemNameElementNumber) {
-        return itemPrice.get(itemNameElementNumber).getText();
+        return itemName.get(itemNameElementNumber).getText();
+    }
+
+    public void clickItemName(int itemNameElementNumber) {
+        itemName.get(itemNameElementNumber).click();
     }
 
     public boolean assertSortByItemName(sorting sortBy) {
@@ -177,7 +180,7 @@ public class HomePage {
     }
 
     public String getProductSectionText() {
-        return productstext.getText();
+        return productsText.getText();
     }
 
     // Initialization ------------
