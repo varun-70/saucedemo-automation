@@ -20,5 +20,20 @@ public class DataProviderUtils {
         };
         return data;
     }
+
+    @DataProvider(name = "checkOutInformation")
+    public Object[][] getCheckoutInfo() {
+        Object[][] data = {
+                {"Negative", "Error: First Name is required", "", "", ""},
+                {"Negative", "Error: First Name is required", "", "", "1234"},
+                {"Negative", "Error: First Name is required", "", "lastName", ""},
+                {"Negative", "Error: First Name is required", "", "lastName", "1234"},
+                {"Negative", "Error: Last Name is required", "firstName", "", ""},
+                {"Negative", "Error: Last Name is required", "firstName", "", "123"},
+                {"Negative", "Error: Postal Code is required", "firstName", "lastName", ""},
+                {"Positive", "", "firstName", "lastName", "1234"}
+        };
+        return data;
+    }
 }
 
