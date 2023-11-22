@@ -9,6 +9,7 @@
             <class name="testcases.LoginScreenTestCase"/>
             <class name="testcases.HomeScreenTestCase"/>
             <class name="testcases.CartTestCase"/>
+            <class name="testcases.CheckoutTestCase"/>
         </classes>
     </test>
 </suite>

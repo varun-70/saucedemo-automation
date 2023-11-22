@@ -72,7 +72,8 @@ public class ImageComparison {
         cart_icon_with_one_item,
         twitter_social_icon,
         facebook_social_icon,
-        linkedin_social_icon
+        linkedin_social_icon,
+        checkout_complete_icon
     }
 
     /** To set the captureBaseLine flag to capture the images without performing the image comparison */

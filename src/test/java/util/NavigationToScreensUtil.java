@@ -3,6 +3,7 @@ package util;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import pages.CartPage;
+import pages.CheckoutPage;
 import pages.HomePage;
 import pages.LoginPage;
 
@@ -17,10 +18,11 @@ public class NavigationToScreensUtil {
     LoginPage loginPage;
     CartPage cartPage;
     HomePage homePage;
+    CheckoutPage checkoutPage;
     HelperUtil helperUtil;
 
     /**
-     * To navigate any screen on saucedemo site
+     * To navigate any particular screen on saucedemo site
      * @param screenName takes the name of the screen
      */
     public void navigateToScreen(screenName screenName) {
@@ -30,20 +32,48 @@ public class NavigationToScreensUtil {
         } catch (NoSuchElementException ignored) {}
 
         switch (screenName) {
-            case YourCart: if (!cartPage.isYourCartDisplayed()) {
-                homePage.clickShoppingCartLink();
-            }
-            if (!cartPage.removeButton.isEmpty()) {
-                for (int i = 0; i < cartPage.removeButton.size(); i++)
-                    cartPage.clickRemoveButton(0);
-            }
+            case Home:
+                if (!homePage.isHomePageDisplayed()) {
+                    cartPage.clickContinueShoppingButton();
+                }
+                break;
 
-            break;
+            case YourCart:
+                if (!cartPage.isYourCartDisplayed()) {
+                    homePage.clickShoppingCartLink();
+                }
+                if (!cartPage.removeButton.isEmpty()) {
+                    for (int i = 0; i < cartPage.removeButton.size(); i++)
+                        cartPage.clickRemoveButton(0);
+                }
+                break;
 
-            case Home: if(!homePage.isHomePageDisplayed()) {
-                cartPage.clickContinueShoppingButton();
-            }
-            break;
+            case CheckoutYourInformation:
+                if (checkoutPage.pageTitleDisplayed(CheckoutPage.pageTitles.checkoutYourInformation)) {
+                    break;
+                }
+                addProductToCartAndCheckout();
+                break;
+
+            case CheckoutOverview:
+                if (checkoutPage.pageTitleDisplayed(CheckoutPage.pageTitles.checkoutOverview)) {
+                    break;
+                }
+                addProductToCartAndCheckout();
+                fillInfoFields();
+                checkoutPage.clickContinueButton();
+                break;
+
+
+            case CheckoutComplete:
+                if (checkoutPage.pageTitleDisplayed(CheckoutPage.pageTitles.checkoutComplete)) {
+                    break;
+                }
+                addProductToCartAndCheckout();
+                fillInfoFields();
+                checkoutPage.clickContinueButton();
+                checkoutPage.clickFinishButton();
+                break;
         }
 
         helperUtil.turnOnImplicitWaits(Duration.ofSeconds(10));
@@ -55,14 +85,40 @@ public class NavigationToScreensUtil {
         loginPage.tapLoginButton();
     }
 
+    void addProductToCartAndCheckout() {
+        try {
+            checkoutPage.clickCancelButton();
+        } catch (NoSuchElementException ignored) {}
+
+        try {
+            cartPage.clickContinueShoppingButton();
+        } catch (NoSuchElementException ignored) {}
+
+        try {
+            checkoutPage.clickBackHomeButton();
+        } catch (NoSuchElementException ignored) {}
+
+        if (homePage.isHomePageDisplayed()) {
+            homePage.clickAddToCartButton(0);
+            homePage.clickShoppingCartLink();
+            cartPage.clickCheckoutButton();
+        }
+    }
+
+    void fillInfoFields() {
+        checkoutPage.setFirstNameTextField("firstName");
+        checkoutPage.setLastNameTextField("lastName");
+        checkoutPage.setPostalCodeTextField("1234");
+    }
+
     /** Screen names, used to send as parameter while navigating to any screen */
     public enum screenName {
         Home,
         YourCart,
         LoginScreen,
         CheckoutYourInformation,
-        CheckoutOverview
-
+        CheckoutOverview,
+        CheckoutComplete
 
     }
 
@@ -72,5 +128,6 @@ public class NavigationToScreensUtil {
         helperUtil = new HelperUtil(driver);
         cartPage = new CartPage(driver);
         homePage = new HomePage(driver);
+        checkoutPage = new CheckoutPage(driver);
     }
 }
