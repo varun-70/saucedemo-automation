@@ -1,6 +1,6 @@
 package com.saucelab.testcases;
 
-import com.saucelab.base.BaseClass;
+import com.saucelab.base.BaseTest;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -11,7 +11,7 @@ import com.saucelab.provider.DataProviderUtils;
 
 import java.util.Objects;
 
-public class LoginScreenTestCase extends BaseClass {
+public class LoginScreenTestCase extends BaseTest {
 
     static WebDriver driver;
     LoginPage login;

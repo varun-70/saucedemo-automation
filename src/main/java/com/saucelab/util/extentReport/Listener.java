@@ -1,17 +1,16 @@
-package com.saucelab.util;
+package com.saucelab.util.extentReport;
 
-import com.saucelab.base.BaseClass;
+import com.saucelab.base.BaseTest;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.testng.*;
-import com.saucelab.util.extentReport.ExtentReportTestNG;
 
 import java.io.File;
 
-public class Listener extends BaseClass implements ITestListener, IExecutionListener, IReporter, IClassListener, ISuiteListener {
+public class Listener extends BaseTest implements ITestListener, IExecutionListener, IReporter, IClassListener, ISuiteListener {
     ExtentReports extent;
     public static ExtentTest test;
     public static ExtentTest node;

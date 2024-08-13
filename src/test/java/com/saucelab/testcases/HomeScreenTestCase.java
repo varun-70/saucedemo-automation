@@ -1,6 +1,6 @@
 package com.saucelab.testcases;
 
-import com.saucelab.base.BaseClass;
+import com.saucelab.base.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -15,7 +15,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeScreenTestCase extends BaseClass {
+public class HomeScreenTestCase extends BaseTest {
     HomePage homePage;
     HelperUtil helperUtil;
     SoftAssert softAssert;
