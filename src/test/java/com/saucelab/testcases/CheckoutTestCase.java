@@ -1,6 +1,6 @@
 package com.saucelab.testcases;
 
-import com.saucelab.base.BaseClass;
+import com.saucelab.base.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -14,7 +14,7 @@ import com.saucelab.util.NavigationToScreensUtil;
 
 import java.time.Duration;
 
-public class CheckoutTestCase extends BaseClass {
+public class CheckoutTestCase extends BaseTest {
     HomePage homePage;
     CheckoutPage checkoutPage;
     HomeScreenTestCase homeScreenTestCase;

@@ -1,6 +1,6 @@
 package com.saucelab.testcases;
 
-import com.saucelab.base.BaseClass;
+import com.saucelab.base.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -10,7 +10,7 @@ import com.saucelab.pages.CartPage;
 import com.saucelab.pages.HomePage;
 import com.saucelab.util.NavigationToScreensUtil;
 
-public class CartTestCase extends BaseClass {
+public class CartTestCase extends BaseTest {
     ThreadLocal<CartPage> cartPage = new ThreadLocal<>();
     ThreadLocal<HomePage> homePage = new ThreadLocal<>();;
     ThreadLocal<HomeScreenTestCase> homeScreenTestCase = new ThreadLocal<>();;

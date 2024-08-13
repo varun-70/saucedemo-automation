@@ -2,18 +2,15 @@ package com.saucelab.base;
 
 import com.saucelab.constants.Constants;
 import com.saucelab.provider.TestDataReader;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
 import java.io.IOException;
-import java.time.Duration;
 
 
-public class BaseClass {
+public class BaseTest {
     public static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
     @BeforeSuite(alwaysRun = true, description = "Read test data")
