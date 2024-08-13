@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <listeners>
+        <listener class-name="com.saucelab.util.Listener"/>
+    </listeners>
+    <test name="Smoke Test" parallel="methods" thread-count="1" verbose="2" preserve-order="true" >
+        <classes>
+            <class name="com.saucelab.testcases.LoginScreenTestCase"/>
+            <class name="com.saucelab.testcases.HomeScreenTestCase"/>
+            <class name="com.saucelab.testcases.CartTestCase"/>
+            <class name="com.saucelab.testcases.CheckoutTestCase"/>
+        </classes>
+    </test>
+</suite>

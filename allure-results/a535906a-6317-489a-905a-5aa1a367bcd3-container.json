@@ -1,1 +1,0 @@
-{"uuid":"a535906a-6317-489a-905a-5aa1a367bcd3","name":"saucedemo-automation","children":["8c9c0c4b-ba6a-44d3-9c68-e3d37e685871"],"befores":[{"name":"setup","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1697802234627,"stop":1697802234724}],"afters":[],"start":1697802234570,"stop":1697802241081}
