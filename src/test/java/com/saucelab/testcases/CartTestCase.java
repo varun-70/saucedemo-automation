@@ -1,6 +1,7 @@
 package com.saucelab.testcases;
 
 import com.saucelab.base.BaseTest;
+import io.qameta.allure.Epic;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -10,11 +11,12 @@ import com.saucelab.pages.CartPage;
 import com.saucelab.pages.HomePage;
 import com.saucelab.util.NavigationToScreensUtil;
 
+@Epic("Cart")
 public class CartTestCase extends BaseTest {
     ThreadLocal<CartPage> cartPage = new ThreadLocal<>();
-    ThreadLocal<HomePage> homePage = new ThreadLocal<>();;
-    ThreadLocal<HomeScreenTestCase> homeScreenTestCase = new ThreadLocal<>();;
-    ThreadLocal<NavigationToScreensUtil> navigationToScreensUtil = new ThreadLocal<>();;
+    ThreadLocal<HomePage> homePage = new ThreadLocal<>();
+    ThreadLocal<HomeScreenTestCase> homeScreenTestCase = new ThreadLocal<>();
+    ThreadLocal<NavigationToScreensUtil> navigationToScreensUtil = new ThreadLocal<>();
 
     @BeforeClass
     void initialize() {
@@ -49,7 +51,7 @@ public class CartTestCase extends BaseTest {
         for (int i=0; i<3; i++) {
             itemsAddedToCart[i] = homePage.get().getItemName(itemElementForItemNameAndPrice[i]);
             itemsAddedToCartPrice[i] = homePage.get().getItemPrice(itemElementForItemNameAndPrice[i]);
-            homePage.get().clickAddToCartButton(itemElementsForAddToCart[i]);
+            homePage.get().addItemsToCart(itemElementsForAddToCart[i]);
             System.out.println(itemsAddedToCart[i] + " - " + itemsAddedToCartPrice[i]);
         }
 
@@ -67,18 +69,10 @@ public class CartTestCase extends BaseTest {
 
     @Test
     void removeItemsTest() {
-        if(cartPage.get().numberOfItemsInCart() == 0) {
-            cartPage.get().clickContinueShoppingButton();
-            for(int i=0; i<3; i++) {
-                homePage.get().clickAddToCartButton(0);
-            }
-        }
-
-        for(int i=2; i>=0; i--) {
-            cartPage.get().clickRemoveButton(i);
-        }
-
-        Assert.assertEquals(cartPage.get().removeButton.size(),0);
+        cartPage.get().verifyNumberOfItemsInCart(0)
+                .clickContinueShoppingButton();
+        homePage.get().addItemsToCart(3);
+        cartPage.get().removeItemsFromCart(3);
     }
 
     @Test
@@ -86,7 +80,8 @@ public class CartTestCase extends BaseTest {
         cartPage.get().clickContinueShoppingButton();
         homePage.get().productsText.isDisplayed();
 
-        homePage.get().clickItemName(0);
+        homePage.get().clickItemName(0)
+                        .clickShoppingCartLink();
         homePage.get().clickShoppingCartLink();
         cartPage.get().clickContinueShoppingButton();
         homePage.get().productsText.isDisplayed();

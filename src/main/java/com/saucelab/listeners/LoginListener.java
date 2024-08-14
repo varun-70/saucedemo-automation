@@ -45,8 +45,8 @@ public class LoginListener implements IInvokedMethodListener {
     private void login() {
         WebDriver driver = BaseTest.driver.get();
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.setUsernametextfield(Constants.STANDARD_USER);
-        loginPage.setPasswordtextfield(Constants.PASSWORD);
-        loginPage.tapLoginButton();
+        loginPage.setUsernametextfield(Constants.STANDARD_USER)
+                .setPasswordtextfield(Constants.PASSWORD)
+                .tapLoginButton();
     }
 }

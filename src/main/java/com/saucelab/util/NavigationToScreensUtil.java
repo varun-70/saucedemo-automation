@@ -99,7 +99,7 @@ public class NavigationToScreensUtil {
         } catch (NoSuchElementException ignored) {}
 
         if (homePage.isHomePageDisplayed()) {
-            homePage.clickAddToCartButton(0);
+            homePage.addItemsToCart(0);
             homePage.clickShoppingCartLink();
             cartPage.clickCheckoutButton();
         }

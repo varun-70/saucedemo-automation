@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
 
 import java.util.List;
 
@@ -33,13 +34,21 @@ public class CartPage {
     public WebElement yourCartText;
 
     // Utilization ---------------------------------------------
-    public int numberOfItemsInCart() {
-        return cartQuantity.size();
+    public CartPage verifyNumberOfItemsInCart(int expectedResult) {
+        Assert.assertEquals(cartQuantity.size(), expectedResult);
+        return this;
     }
 
     public float getItemPrices(int elementIndex) {
         String itemPriceInString = itemPrices.get(elementIndex).getText();
         return Float.parseFloat(itemPriceInString.substring(1));
+    }
+
+    public CartPage removeItemsFromCart(int numberOfItemsToRemoveToCart) {
+        for (int i = numberOfItemsToRemoveToCart-1; i >= 0; i--) {
+            removeButton.get(i).click();
+        }
+        return this;
     }
 
     /**
@@ -49,12 +58,14 @@ public class CartPage {
         return itemName.get(itemNameElementNumber).getText();
     }
 
-    public void clickContinueShoppingButton() {
+    public CartPage clickContinueShoppingButton() {
         continueShoppingButton.click();
+        return this;
     }
 
-    public void clickRemoveButton(int elementIndex) {
+    public CartPage clickRemoveButton(int elementIndex) {
         removeButton.get(elementIndex).click();
+        return this;
     }
 
     public boolean isYourCartDisplayed() {

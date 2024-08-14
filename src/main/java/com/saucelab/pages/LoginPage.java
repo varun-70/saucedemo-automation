@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
 
 
 public class LoginPage {
@@ -32,16 +33,24 @@ public class LoginPage {
         return headertext.getText();
     }
 
-    public void setUsernametextfield(String username) {
+    public LoginPage verifyHeaderText(String expectedResult) {
+        Assert.assertEquals(headertext.getText(), expectedResult);
+        return this;
+    }
+
+    public LoginPage setUsernametextfield(String username) {
         usernametextfield.sendKeys(username);
+        return this;
     }
 
-    public void setPasswordtextfield(String password) {
+    public LoginPage setPasswordtextfield(String password) {
         passwordtextfield.sendKeys(password);
+        return this;
     }
 
-    public void tapLoginButton() {
+    public LoginPage tapLoginButton() {
         loginbutton.click();
+        return this;
     }
 
     public String getError() {

@@ -1,105 +1,110 @@
 package com.saucelab.testcases;
 
+import com.saucelab.annotaions.SkipToCheckoutYourInformation;
 import com.saucelab.base.BaseTest;
+import io.qameta.allure.Epic;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import com.saucelab.pages.CheckoutPage;
 import com.saucelab.pages.HomePage;
 import com.saucelab.provider.DataProviderUtils;
-import com.saucelab.util.HelperUtil;
 import com.saucelab.util.ImageComparison;
 import com.saucelab.util.NavigationToScreensUtil;
 
-import java.time.Duration;
-
+@Epic("Checkout")
 public class CheckoutTestCase extends BaseTest {
-    HomePage homePage;
-    CheckoutPage checkoutPage;
-    HomeScreenTestCase homeScreenTestCase;
-    ImageComparison imageComparison;
-    NavigationToScreensUtil navigationToScreensUtil;
-    HelperUtil helperUtil;
-
-    @BeforeClass
-    void initialize() {
-        homePage = new HomePage(driver.get());
-        checkoutPage = new CheckoutPage(driver.get());
-        homeScreenTestCase = new HomeScreenTestCase();
-        imageComparison = new ImageComparison(driver.get());
-        navigationToScreensUtil = new NavigationToScreensUtil(driver.get());
-        helperUtil = new HelperUtil(driver.get());
-        homeScreenTestCase.initialize();
-    }
+    ThreadLocal<HomePage> homePage = new ThreadLocal<>();
+    ThreadLocal<CheckoutPage> checkoutPage = new ThreadLocal<>();
+    ThreadLocal<HomeScreenTestCase> homeScreenTestCase = new ThreadLocal<>();
+    ThreadLocal<ImageComparison> imageComparison = new ThreadLocal<>();
+    ThreadLocal<NavigationToScreensUtil> navigationToScreensUtil = new ThreadLocal<>();
 
     @BeforeMethod
-    void preRequisite() {
-        navigationToScreensUtil.navigateToScreen(NavigationToScreensUtil.screenName.CheckoutYourInformation);
+    void initialize() {
+        homePage.set(new HomePage(driver.get()));
+        checkoutPage.set(new CheckoutPage(driver.get()));
+        homeScreenTestCase.set(new HomeScreenTestCase());
+        imageComparison.set(new ImageComparison(driver.get()));
+        navigationToScreensUtil.set(new NavigationToScreensUtil(driver.get()));
+        homeScreenTestCase.get().initialize();
     }
 
+    @AfterMethod(alwaysRun = true, description = "Clean up page objects")
+    void cleanup() {
+        homePage.remove();
+        checkoutPage.remove();
+        homeScreenTestCase.remove();
+        imageComparison.remove();
+        navigationToScreensUtil.remove();
+    }
 
     @Test (dataProvider = "checkOutInformation", dataProviderClass = DataProviderUtils.class)
+    @SkipToCheckoutYourInformation
     void checkoutInformationTest(String userFlow, String error, String firstName, String lastName, String postalCode) {
-        checkoutPage.setFirstNameTextField(firstName);
-        checkoutPage.setLastNameTextField(lastName);
-        checkoutPage.setPostalCodeTextField(postalCode);
-        checkoutPage.clickContinueButton();
+        checkoutPage.get().setFirstNameTextField(firstName)
+                .setLastNameTextField(lastName)
+                .setPostalCodeTextField(postalCode)
+                .clickContinueButton();
         if (!error.isEmpty()) {
-            Assert.assertEquals(error, checkoutPage.getErrorMessage());
+            checkoutPage.get().verifyErrorMessage(error);
         }
     }
 
     @Test
+    @SkipToCheckoutYourInformation
     void checkoutNavigationTest() {
-        checkoutPage.assertPageTitle(CheckoutPage.pageTitles.checkoutYourInformation);
-        checkoutPage.clickCancelButton();
-        checkoutPage.assertPageTitle(CheckoutPage.pageTitles.yourCart);
-        checkoutPage.clickCheckoutButton();
-        navigationToScreensUtil.navigateToScreen(NavigationToScreensUtil.screenName.CheckoutOverview);
-        checkoutPage.assertPageTitle(CheckoutPage.pageTitles.checkoutOverview);
-        checkoutPage.clickCancelButton();
-        checkoutPage.assertPageTitle(CheckoutPage.pageTitles.products);
-        navigationToScreensUtil.navigateToScreen(NavigationToScreensUtil.screenName.CheckoutComplete);
-        checkoutPage.assertPageTitle(CheckoutPage.pageTitles.checkoutComplete);
-        checkoutPage.clickBackHomeButton();
-        checkoutPage.assertPageTitle(CheckoutPage.pageTitles.products);
+        checkoutPage.get().assertPageTitle(CheckoutPage.pageTitles.checkoutYourInformation)
+                .clickCancelButton()
+                .assertPageTitle(CheckoutPage.pageTitles.yourCart)
+                .clickCheckoutButton();
+        navigationToScreensUtil.get().navigateToScreen(NavigationToScreensUtil.screenName.CheckoutOverview);
+        checkoutPage.get().assertPageTitle(CheckoutPage.pageTitles.checkoutOverview)
+                .clickCancelButton()
+                .assertPageTitle(CheckoutPage.pageTitles.products);
+        navigationToScreensUtil.get().navigateToScreen(NavigationToScreensUtil.screenName.CheckoutComplete);
+        checkoutPage.get().assertPageTitle(CheckoutPage.pageTitles.checkoutComplete)
+                .clickBackHomeButton()
+                .assertPageTitle(CheckoutPage.pageTitles.products);
     }
 
     @Test
+    @SkipToCheckoutYourInformation
     void paymentSummaryInfoTest() {
-        navigationToScreensUtil.navigateToScreen(NavigationToScreensUtil.screenName.CheckoutOverview);
-        checkoutPage.assertPaymentInformation();
-        checkoutPage.assertShippingInformation();
-        checkoutPage.assertSubTotalPrice();
-        checkoutPage.assertTaxPrice();
-        checkoutPage.assertTotalPrice();
+        navigationToScreensUtil.get().navigateToScreen(NavigationToScreensUtil.screenName.CheckoutOverview);
+        checkoutPage.get().assertPaymentInformation()
+                .assertShippingInformation()
+                .assertSubTotalPrice()
+                .assertTaxPrice()
+                .assertTotalPrice();
     }
 
     @Test
+    @SkipToCheckoutYourInformation
     void orderCompletedVisualTest() {
-        navigationToScreensUtil.navigateToScreen(NavigationToScreensUtil.screenName.CheckoutComplete);
-        imageComparison.imageComparisonAshot(ImageComparison.imageName.checkout_complete_icon.toString(), checkoutPage.orderCompletedIcon);
-        checkoutPage.clickBackHomeButton();
-        imageComparison.imageComparisonAshot(ImageComparison.imageName.cart_icon_without_items_in_cart.toString(), homePage.linkShoppingCart);
+        navigationToScreensUtil.get().navigateToScreen(NavigationToScreensUtil.screenName.CheckoutComplete);
+        imageComparison.get().imageComparisonAshot(ImageComparison.imageName.checkout_complete_icon.toString(), checkoutPage.get().orderCompletedIcon);
+        checkoutPage.get().clickBackHomeButton();
+        imageComparison.get().imageComparisonAshot(ImageComparison.imageName.cart_icon_without_items_in_cart.toString(), homePage.get().linkShoppingCart);
     }
 
     @Test
+    @SkipToCheckoutYourInformation
     void orderCompleteTest() {
-        navigationToScreensUtil.navigateToScreen(NavigationToScreensUtil.screenName.CheckoutComplete);
-        checkoutPage.assertPageTitle(CheckoutPage.pageTitles.checkoutComplete);
-        Assert.assertEquals(checkoutPage.getOrderCompletedHeader(), "Thank you for your order!");
-        Assert.assertEquals(checkoutPage.getOrderCompletedText(), "Your order has been dispatched, and will arrive just as fast as the pony can get there!");
+        navigationToScreensUtil.get().navigateToScreen(NavigationToScreensUtil.screenName.CheckoutComplete);
+        checkoutPage.get().assertPageTitle(CheckoutPage.pageTitles.checkoutComplete)
+                .getOrderCompletedHeader("Thank you for your order!")
+                .getOrderCompletedHeader("Your order has been dispatched, and will arrive just as fast as the pony can get there!");
     }
 
     @Test
+    @SkipToCheckoutYourInformation
     void socialLinkNavigationTest() {
-        homeScreenTestCase.socialLinkNavigationTest();
-        navigationToScreensUtil.navigateToScreen(NavigationToScreensUtil.screenName.CheckoutOverview);
-        helperUtil.wait(Duration.ofSeconds(1));
-        homeScreenTestCase.socialLinkNavigationTest();
-        navigationToScreensUtil.navigateToScreen(NavigationToScreensUtil.screenName.CheckoutComplete);
-        helperUtil.wait(Duration.ofSeconds(1));
-        homeScreenTestCase.socialLinkNavigationTest();
+        homeScreenTestCase.get().socialLinkNavigationTest();
+        navigationToScreensUtil.get().navigateToScreen(NavigationToScreensUtil.screenName.CheckoutOverview);
+        homeScreenTestCase.get().socialLinkNavigationTest();
+        navigationToScreensUtil.get().navigateToScreen(NavigationToScreensUtil.screenName.CheckoutComplete);
+        homeScreenTestCase.get().socialLinkNavigationTest();
     }
 }
