@@ -1,7 +1,11 @@
 package com.saucelab.testcases;
 
+import com.saucelab.annotaions.Login;
 import com.saucelab.base.BaseTest;
+import com.saucelab.constants.Constants;
+import io.qameta.allure.Epic;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -15,109 +19,100 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+@Epic("Home")
 public class HomeScreenTestCase extends BaseTest {
-    HomePage homePage;
-    HelperUtil helperUtil;
-    SoftAssert softAssert;
-    ImageComparison imageComparison;
-    NavigationToScreensUtil navigationToScreensUtil;
+    ThreadLocal<HomePage> homePage = new ThreadLocal<>();
+    ThreadLocal<ImageComparison> imageComparison = new ThreadLocal<>();
+    ThreadLocal<NavigationToScreensUtil> navigationToScreensUtil = new ThreadLocal<>();
 
     @BeforeClass
     void initialize() {
-        homePage = new HomePage(driver.get());
-        helperUtil = new HelperUtil(driver.get());
-        softAssert = new SoftAssert();
-        imageComparison = new ImageComparison(driver.get());
-        navigationToScreensUtil = new NavigationToScreensUtil(driver.get());
+        homePage.set(new HomePage(driver.get()));
+        imageComparison.set(new ImageComparison(driver.get()));
+        navigationToScreensUtil.set(new NavigationToScreensUtil(driver.get()));
     }
 
-    @BeforeMethod
-    void preRequisite() {
-        navigationToScreensUtil.navigateToScreen(NavigationToScreensUtil.screenName.Home);
+    @AfterMethod(alwaysRun = true, description = "Clean up page objects")
+    void cleanup() {
+        homePage.remove();
+        imageComparison.remove();
+        navigationToScreensUtil.remove();
     }
 
     /** To perform visual assertion on the shopping cart with and without any items in cart, and social links */
     @Test
+    @Login
     public void visualTest() {
-        imageComparison.imageComparisonAshot(ImageComparison.imageName.cart_icon_without_items_in_cart.toString(), homePage.linkShoppingCart);
-        homePage.clickAddToCartButton(0);
-        imageComparison.imageComparisonAshot(ImageComparison.imageName.cart_icon_with_one_item.toString(), homePage.linkShoppingCart);
-        imageComparison.imageComparisonAshot(ImageComparison.imageName.twitter_social_icon.toString(), homePage.twitterSocialLink);
-        imageComparison.imageComparisonAshot(ImageComparison.imageName.facebook_social_icon.toString(), homePage.facebookSocialLink);
-        imageComparison.imageComparisonAshot(ImageComparison.imageName.linkedin_social_icon.toString(), homePage.linkedInSocialLink);
+        imageComparison.get().imageComparisonAshot(ImageComparison.imageName.cart_icon_without_items_in_cart.toString(), homePage.get().linkShoppingCart);
+        homePage.get().addItemsToCart(0);
+        imageComparison.get().imageComparisonAshot(ImageComparison.imageName.cart_icon_with_one_item.toString(), homePage.get().linkShoppingCart);
+        imageComparison.get().imageComparisonAshot(ImageComparison.imageName.twitter_social_icon.toString(), homePage.get().twitterSocialLink);
+        imageComparison.get().imageComparisonAshot(ImageComparison.imageName.facebook_social_icon.toString(), homePage.get().facebookSocialLink);
+        imageComparison.get().imageComparisonAshot(ImageComparison.imageName.linkedin_social_icon.toString(), homePage.get().linkedInSocialLink);
     }
 
     @Test
+    @Login
     public void addToCartTest() {
-        int addToCartButtonsCount = homePage.addToCartButton.size();
+        int addToCartButtonsCount = homePage.get().addToCartButton.size();
         for (int i = 0; i < addToCartButtonsCount; i++) {
-            homePage.clickAddToCartButton(0);
+            homePage.get().addItemsToCart(0);
         }
 
-        homePage.clickShoppingCartLink();
-        Assert.assertEquals(homePage.cartQuantity.size(), addToCartButtonsCount);
-        homePage.clickContinueShoppingButton();
+        homePage.get().clickShoppingCartLink();
+        Assert.assertEquals(homePage.get().cartQuantity.size(), addToCartButtonsCount);
+        homePage.get().clickContinueShoppingButton();
 
-        int removeButtonCount = homePage.removeButton.size();
+        int removeButtonCount = homePage.get().removeButton.size();
         for (int i = 0; i < removeButtonCount; i++) {
-            homePage.clickRemoveButton(1);
+            homePage.get().clickRemoveButton(1);
         }
-        homePage.clickShoppingCartLink();
-        Assert.assertEquals(homePage.cartQuantity.size(), 0);
-        homePage.clickContinueShoppingButton();
+        homePage.get().clickShoppingCartLink();
+        Assert.assertEquals(homePage.get().cartQuantity.size(), 0);
+        homePage.get().clickContinueShoppingButton();
     }
 
     @Test
+    @Login
     public void directUrlNavigationTest() {
         driver.get().manage().deleteAllCookies();
         driver.get().get("https://www.saucedemo.com/inventory.html");
-        homePage.assertWrongNavigationError();
+        homePage.get().assertWrongNavigationError();
     }
 
     @Test
+    @Login
     public void sorting() {
-        homePage.setSortingDropDown(HomePage.sorting.Name_A_to_Z);
-        Assert.assertTrue(homePage.assertSortByItemName(HomePage.sorting.Name_A_to_Z));
-
-        homePage.setSortingDropDown(HomePage.sorting.Name_Z_to_A);
-        Assert.assertTrue(homePage.assertSortByItemName(HomePage.sorting.Name_Z_to_A));
-
-        homePage.setSortingDropDown(HomePage.sorting.Price_low_to_high);
-        Assert.assertTrue(homePage.asserSortByPrice(HomePage.sorting.Price_low_to_high));
-
-        homePage.setSortingDropDown(HomePage.sorting.Price_high_to_low);
-        Assert.assertTrue(homePage.asserSortByPrice(HomePage.sorting.Price_high_to_low));
+        homePage.get().setSortingDropDown(HomePage.sorting.Name_A_to_Z)
+                .assertSortByItemName(HomePage.sorting.Name_A_to_Z)
+                .setSortingDropDown(HomePage.sorting.Name_Z_to_A)
+                .assertSortByItemName(HomePage.sorting.Name_Z_to_A)
+                .setSortingDropDown(HomePage.sorting.Price_low_to_high)
+                .asserSortByPrice(HomePage.sorting.Price_low_to_high)
+                .setSortingDropDown(HomePage.sorting.Price_high_to_low)
+                .asserSortByPrice(HomePage.sorting.Price_high_to_low);
     }
 
     @Test
+    @Login
     public void socialLinkNavigationTest() {
-        homePage.clickTwitterSocialLink();
-        assertSocialLinkNavigationTest("https://twitter.com/saucelabs");
-
-        homePage.clickFacebookSocialLink();
-        assertSocialLinkNavigationTest("https://www.facebook.com/saucelabs");
-
-        homePage.clickLinkedInSocialLink();
-        assertSocialLinkNavigationTest("https://www.linkedin.com/company/sauce-labs/");
+        homePage.get().clickTwitterSocialLink()
+                .verifySocialLinkNavigationTest(Constants.TWITTER_LINK)
+                .clickFacebookSocialLink()
+                .verifySocialLinkNavigationTest(Constants.FACEBOOK_LINK)
+                .clickLinkedInSocialLink()
+                .verifySocialLinkNavigationTest(Constants.LINKEDIN_LINK);
     }
 
     @Test
+    @Login
     public void copyRightLabelTest() {
-        homePage.assertCopyRightLabel();
+        homePage.get().assertCopyRightLabel();
     }
 
     @Test(enabled = false)
+    @Login
     public void performanceTest() {
         // Write your code here
-    }
-
-    void assertSocialLinkNavigationTest(String expectedLink) {
-        List<String> browserTabs = new ArrayList<>(driver.get().getWindowHandles());
-        driver.get().switchTo().window(browserTabs.get(1));
-        helperUtil.wait(Duration.ofSeconds(2));
-
-        Assert.assertEquals(driver.get().getCurrentUrl(), expectedLink);
-        driver.get().close();
-        driver.get().switchTo().window(browserTabs.get(0));
     }
 }

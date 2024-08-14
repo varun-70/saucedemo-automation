@@ -3,6 +3,7 @@
 <suite name="Smoke Test Suite">
     <listeners>
         <listener class-name="com.saucelab.listeners.LoginListener"/>
+        <listener class-name="com.saucelab.listeners.SkipToCheckoutYourInformationListeners"/>
         <listener class-name="com.saucelab.listeners.TestFailedListener"/>
     </listeners>
     <test name="Smoke Test" parallel="methods" thread-count="1" verbose="2" preserve-order="true" >

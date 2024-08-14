@@ -73,51 +73,62 @@ public class CheckoutPage {
 
     // Utilization ---------------------------------------------
 
-    public void clickCancelButton() {
+    public CheckoutPage clickCancelButton() {
         cancelButton.click();
+        return this;
     }
 
-    public void clickContinueButton() {
+    public CheckoutPage clickContinueButton() {
         continueButton.click();
+        return this;
     }
 
-    public void clickFinishButton() {
+    public CheckoutPage clickFinishButton() {
         finishButton.click();
+        return this;
     }
 
-    public void clickBackHomeButton() {
+    public CheckoutPage clickBackHomeButton() {
         backHomeButton.click();
+        return this;
     }
 
-    public void clickErrorCloseIcon() {
+    public CheckoutPage clickErrorCloseIcon() {
         errorCloseIcon.click();
+        return this;
     }
 
-    public void clickCheckoutButton() {
+    public CheckoutPage clickCheckoutButton() {
         checkoutButton.click();
+        return this;
     }
 
-    public void setFirstNameTextField(String firstName) {
+    public CheckoutPage setFirstNameTextField(String firstName) {
         firstNameTextField.clear();
         firstNameTextField.sendKeys(firstName);
+        return this;
     }
 
-    public void setLastNameTextField(String lastName) {
+    public CheckoutPage setLastNameTextField(String lastName) {
         lastNameTextField.clear();
         lastNameTextField.sendKeys(lastName);
+        return this;
     }
 
-    public void setPostalCodeTextField(String postalCode) {
+    public CheckoutPage setPostalCodeTextField(String postalCode) {
         postalCodeTextField.clear();
         postalCodeTextField.sendKeys(postalCode);
+        return this;
     }
 
-    public String getErrorMessage() {
-        return errorMessage.getText();
+    public CheckoutPage verifyErrorMessage(String expectedMessage) {
+        Assert.assertEquals(errorMessage.getText(), expectedMessage);
+        return this;
     }
 
-    public String getOrderCompletedHeader() {
-        return orderCompletedHeader.getText();
+    public CheckoutPage getOrderCompletedHeader(String expectedText) {
+        Assert.assertEquals(orderCompletedHeader.getText(), expectedText);
+        return this;
     }
 
     public String getOrderCompletedText() {
@@ -135,39 +146,45 @@ public class CheckoutPage {
             return false;
     }
 
-    public void assertPageTitle(pageTitles pageTitles) {
+    public CheckoutPage assertPageTitle(pageTitles pageTitles) {
         Assert.assertEquals(pageTitle.getText(), pageTitles.getValue());
+        return this;
     }
 
-    public void assertPaymentInformation() {
+    public CheckoutPage assertPaymentInformation() {
         Assert.assertEquals(paymentInformation.getText(), "SauceCard #31337");
+        return this;
     }
 
-    public void assertShippingInformation() {
+    public CheckoutPage assertShippingInformation() {
         Assert.assertEquals(shippingInformation.getText(), "Free Pony Express Delivery!");
+        return this;
     }
 
-    public void assertSubTotalPrice() {
+    public CheckoutPage assertSubTotalPrice() {
         double subTotalPriceExpected = getItemPrice();
         double subTotalPriceActual = Double.parseDouble(subTotalPriceWithoutTax.getText().substring(13));
         Assert.assertEquals(subTotalPriceActual, subTotalPriceExpected);
+        return this;
     }
 
-    public void assertTaxPrice() {
+    public CheckoutPage assertTaxPrice() {
         double itemPrice = getItemPrice();
         double taxPriceExpected = Math.round((itemPrice * 0.08) * 100.0) / 100.0;
 
         double taxPriceActual = Double.parseDouble(taxPrice.getText().substring(6));
         Assert.assertEquals(taxPriceActual, taxPriceExpected);
+        return this;
     }
 
-    public void assertTotalPrice() {
+    public CheckoutPage assertTotalPrice() {
         double itemPrice = getItemPrice();
         double taxRoundOff = Math.round((itemPrice * 0.08) * 100.0) / 100.0;
         double totalPriceExpected = itemPrice + taxRoundOff;
 
         double totalPriceActual = Double.parseDouble(totalPrice.getText().substring(8));
         Assert.assertEquals(totalPriceActual, totalPriceExpected);
+        return this;
     }
 
     double getItemPrice() {

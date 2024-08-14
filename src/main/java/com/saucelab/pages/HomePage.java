@@ -1,5 +1,6 @@
 package com.saucelab.pages;
 
+import com.saucelab.util.HelperUtil;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,9 +9,13 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomePage {
+    WebDriver driver;
+    HelperUtil helperUtil;
 
     // Declaration -----------------------------------------------
     @FindBy(css = "a[class^='shopping']")
@@ -58,10 +63,10 @@ public class HomePage {
     @FindBy(xpath = "//span[.='Products']")
     public WebElement productsText;
 
-
     // Utilization ---------------------------------------------
-    public void clickShoppingCartLink() {
+    public HomePage clickShoppingCartLink() {
         linkShoppingCart.click();
+        return this;
     }
 
     public boolean isHomePageDisplayed() {
@@ -72,23 +77,26 @@ public class HomePage {
         }
     }
 
-    /**
-     * @param addToCartElementNumber to click on it
-     */
-    public void clickAddToCartButton(int addToCartElementNumber) {
-        addToCartButton.get(addToCartElementNumber).click();
+    public HomePage addItemsToCart(int numberOfItemsToAddToCart) {
+        for(int i = 0; i < numberOfItemsToAddToCart; i++) {
+            addToCartButton.get(0).click();
+        }
+        return this;
     }
 
-    public void clickRemoveButton(int removeElementNumber) {
+    public HomePage clickRemoveButton(int removeElementNumber) {
         removeButton.get(removeElementNumber - 1).click();
+        return this;
     }
 
-    public void assertWrongNavigationError() {
+    public HomePage assertWrongNavigationError() {
         Assert.assertEquals(wrongNavigationError.getText(), "Epic sadface: You can only access '/inventory.html' when you are logged in.");
+        return this;
     }
 
-    public void assertCopyRightLabel() {
+    public HomePage assertCopyRightLabel() {
         Assert.assertEquals(copyRightLabel.getText(), "© 2023 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy");
+        return this;
     }
 
     public float getItemPrice(int i) {
@@ -96,7 +104,7 @@ public class HomePage {
         return Float.parseFloat(priceInString.substring(1));
     }
 
-    public boolean asserSortByPrice(sorting sortBy) {
+    public HomePage asserSortByPrice(sorting sortBy) {
         double[] itemPrices = new double[itemPrice.size()];
         for (int i = 0; i < itemPrice.size(); i++) {
             itemPrices[i] = getItemPrice(i);
@@ -104,13 +112,16 @@ public class HomePage {
 
         for (int i = 0; i < itemPrices.length - 1; i++) {
             if (itemPrices[i] > itemPrices[i + 1] && sortBy.equals(sorting.Price_low_to_high)) {
-                return false;
+                Assert.assertTrue(false);
+                return this;
             }
             if (itemPrices[i] < (itemPrices[i + 1]) && sortBy.equals(sorting.Price_high_to_low)) {
-                return false;
+                Assert.assertTrue(false);
+                return this;
             }
         }
-        return true;
+        Assert.assertTrue(true);
+        return this;
     }
 
     /**
@@ -120,11 +131,12 @@ public class HomePage {
         return itemName.get(itemNameElementNumber).getText();
     }
 
-    public void clickItemName(int itemNameElementNumber) {
+    public HomePage clickItemName(int itemNameElementNumber) {
         itemName.get(itemNameElementNumber).click();
+        return this;
     }
 
-    public boolean assertSortByItemName(sorting sortBy) {
+    public HomePage assertSortByItemName(sorting sortBy) {
         String[] itemNames = new String[itemName.size()];
         for (int i = 0; i < itemName.size(); i++) {
             itemNames[i] = itemName.get(i).getText();
@@ -132,18 +144,22 @@ public class HomePage {
 
         for (int i = 0; i < itemNames.length - 1; i++) {
             if (itemNames[i].compareTo(itemNames[i + 1]) > 0 && sortBy == sorting.Name_A_to_Z) {
-                return false;
+                Assert.assertTrue(false);
+                return this;
             }
             if (itemNames[i].compareTo(itemNames[i + 1]) < 0 && sortBy == sorting.Name_Z_to_A) {
-                return false;
+                Assert.assertTrue(false);
+                return this;
             }
         }
-        return true;
+        Assert.assertTrue(true);
+        return this;
     }
 
-    public void setSortingDropDown(sorting sortBy) {
+    public HomePage setSortingDropDown(sorting sortBy) {
         Select select = new Select(sortingDropDown);
         select.selectByValue(sortBy.getValue());
+        return this;
     }
 
     public enum sorting {
@@ -163,28 +179,45 @@ public class HomePage {
         }
     }
 
-    public void clickContinueShoppingButton() {
+    public HomePage clickContinueShoppingButton() {
         continueShoppingButton.click();
+        return this;
     }
 
-    public void clickTwitterSocialLink() {
+    public HomePage clickTwitterSocialLink() {
         twitterSocialLink.click();
+        return this;
     }
 
-    public void clickFacebookSocialLink() {
+    public HomePage clickFacebookSocialLink() {
         facebookSocialLink.click();
+        return this;
     }
 
-    public void clickLinkedInSocialLink() {
+    public HomePage clickLinkedInSocialLink() {
         linkedInSocialLink.click();
+        return this;
     }
 
     public String getProductSectionText() {
         return productsText.getText();
     }
 
+    public HomePage verifySocialLinkNavigationTest(String expectedLink) {
+        List<String> browserTabs = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(browserTabs.get(1));
+        helperUtil.wait(Duration.ofSeconds(2));
+
+        Assert.assertEquals(driver.getCurrentUrl(), expectedLink);
+        driver.close();
+        driver.switchTo().window(browserTabs.get(0));
+        return this;
+    }
+
     // Initialization ------------
     public HomePage(WebDriver driver) {
         PageFactory.initElements(driver, this);
+        this.driver = driver;
+        helperUtil = new HelperUtil(driver);
     }
 }

@@ -1,6 +1,10 @@
 package com.saucelab.constants;
 
 public class Constants {
+    public final static String HEADER = "Swag Labs";
+    public final static String TWITTER_LINK = "https://twitter.com/saucelabs";
+    public final static String FACEBOOK_LINK = "https://www.facebook.com/saucelabs";
+    public final static String LINKEDIN_LINK = "https://www.linkedin.com/company/sauce-labs/";
     public static String URL;
     public static String STANDARD_USER;
     public static String LOCKED_OUT_USER;
