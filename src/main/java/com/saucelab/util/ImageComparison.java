@@ -36,12 +36,12 @@ public class ImageComparison {
         BufferedImage actualImage = null;
         try {
             FileUtils.copyFile(actualImageFile, new File(System.getProperty("user.dir") +
-                    "/src/test/resources/imageComparison/actualImage/" + fileName + ".png"));
+                    "/src/main/resources/imageComparison/actualImage/" + fileName + ".png"));
             if(!captureBaseLineImage) {
                 expectedImage = ImageIO.read(new File(System.getProperty("user.dir") +
-                        "/src/test/resources/imageComparison/expectedImage/" + fileName + ".png"));
+                        "/src/main/resources/imageComparison/expectedImage/" + fileName + ".png"));
                 actualImage = ImageIO.read(new File(System.getProperty("user.dir") +
-                        "/src/test/resources/imageComparison/actualImage/" + fileName + ".png"));
+                        "/src/main/resources/imageComparison/actualImage/" + fileName + ".png"));
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -53,15 +53,15 @@ public class ImageComparison {
             if (diff.hasDiff()) {
                 try {
                     ImageIO.write(diff.getMarkedImage(),"PNG",new File(System.getProperty("user.dir") +
-                            "/src/test/resources/imageComparison/differenceImage/" + fileName + "_diff.png"));
+                            "/src/main/resources/imageComparison/differenceImage/" + fileName + "_diff.png"));
                     fail();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 } catch (AssertionError e) {
 //                    Logs.logImage(Status.FAIL, "Visual Assertion failed", new File(System.getProperty("user.dir") +
-//                            "/src/test/resources/imageComparison/differenceImage/" + fileName + "_diff.png"));
+//                            "/src/main/resources/imageComparison/differenceImage/" + fileName + "_diff.png"));
                     Allure.addAttachment("Visual Assertion failed", new ByteArrayInputStream((System.getProperty("user.dir") +
-                                                "/src/test/resources/imageComparison/differenceImage/" + fileName + "_diff.png").getBytes()));
+                                                "/src/main/resources/imageComparison/differenceImage/" + fileName + "_diff.png").getBytes()));
 
 //                    fail("Visual Assertion, Image did not pass the visual assertion");
                 }
