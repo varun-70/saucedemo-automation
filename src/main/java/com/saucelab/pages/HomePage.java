@@ -1,6 +1,7 @@
 package com.saucelab.pages;
 
 import com.saucelab.util.HelperUtil;
+import io.qameta.allure.Step;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -22,10 +23,10 @@ public class HomePage {
     public WebElement linkShoppingCart;
 
     @FindBy(css = "select[class='product_sort_container']")
-    WebElement sortingDropDown;
+    private WebElement sortingDropDown;
 
     @FindBy(css = "div[class='app_logo']")
-    WebElement homeHeader;
+    private WebElement homeHeader;
 
     @FindBy(css = "button[id^='add-to-cart']")
     public List<WebElement> addToCartButton;
@@ -43,16 +44,16 @@ public class HomePage {
     public WebElement linkedInSocialLink;
 
     @FindBy(css = "div[class='footer_copy']")
-    WebElement copyRightLabel;
+    private WebElement copyRightLabel;
 
     @FindBy(css = "h3[data-test='error']")
-    WebElement wrongNavigationError;
+    private WebElement wrongNavigationError;
 
     @FindBy(css = "div[class='inventory_item_price']")
-    List<WebElement> itemPrice;
+    private List<WebElement> itemPrice;
 
     @FindBy(css = "div[class='inventory_item_name ']")
-    List<WebElement> itemName;
+    private List<WebElement> itemName;
 
     @FindBy(css = "div[class='cart_quantity']")
     public List<WebElement> cartQuantity;
@@ -64,8 +65,15 @@ public class HomePage {
     public WebElement productsText;
 
     // Utilization ---------------------------------------------
+    @Step("Click shopping cart link")
     public HomePage clickShoppingCartLink() {
         linkShoppingCart.click();
+        return this;
+    }
+
+    @Step("Verify products text is displayed")
+    public HomePage verifyProductsTextIsDisplayed() {
+        Assert.assertTrue(productsText.isDisplayed());
         return this;
     }
 
@@ -77,6 +85,7 @@ public class HomePage {
         }
     }
 
+    @Step("Add items to cart")
     public HomePage addItemsToCart(int numberOfItemsToAddToCart) {
         for(int i = 0; i < numberOfItemsToAddToCart; i++) {
             addToCartButton.get(0).click();
@@ -84,16 +93,19 @@ public class HomePage {
         return this;
     }
 
+    @Step("Click remove button")
     public HomePage clickRemoveButton(int removeElementNumber) {
         removeButton.get(removeElementNumber - 1).click();
         return this;
     }
 
+    @Step("Verify wrong navigation error")
     public HomePage assertWrongNavigationError() {
         Assert.assertEquals(wrongNavigationError.getText(), "Epic sadface: You can only access '/inventory.html' when you are logged in.");
         return this;
     }
 
+    @Step("Verify copy right label")
     public HomePage assertCopyRightLabel() {
         Assert.assertEquals(copyRightLabel.getText(), "© 2023 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy");
         return this;
@@ -104,6 +116,7 @@ public class HomePage {
         return Float.parseFloat(priceInString.substring(1));
     }
 
+    @Step("Verify sort by price")
     public HomePage asserSortByPrice(sorting sortBy) {
         double[] itemPrices = new double[itemPrice.size()];
         for (int i = 0; i < itemPrice.size(); i++) {
@@ -131,11 +144,13 @@ public class HomePage {
         return itemName.get(itemNameElementNumber).getText();
     }
 
+    @Step("Click item name")
     public HomePage clickItemName(int itemNameElementNumber) {
         itemName.get(itemNameElementNumber).click();
         return this;
     }
 
+    @Step("Verify sort by item name")
     public HomePage assertSortByItemName(sorting sortBy) {
         String[] itemNames = new String[itemName.size()];
         for (int i = 0; i < itemName.size(); i++) {
@@ -156,6 +171,7 @@ public class HomePage {
         return this;
     }
 
+    @Step("Set sorting dropdown")
     public HomePage setSortingDropDown(sorting sortBy) {
         Select select = new Select(sortingDropDown);
         select.selectByValue(sortBy.getValue());
@@ -179,21 +195,25 @@ public class HomePage {
         }
     }
 
+    @Step("Click continue shopping button")
     public HomePage clickContinueShoppingButton() {
         continueShoppingButton.click();
         return this;
     }
 
+    @Step("Click twitter social link")
     public HomePage clickTwitterSocialLink() {
         twitterSocialLink.click();
         return this;
     }
 
+    @Step("Click facebook social link")
     public HomePage clickFacebookSocialLink() {
         facebookSocialLink.click();
         return this;
     }
 
+    @Step("Click linkedin social link")
     public HomePage clickLinkedInSocialLink() {
         linkedInSocialLink.click();
         return this;
@@ -203,6 +223,7 @@ public class HomePage {
         return productsText.getText();
     }
 
+    @Step("Verify social link navigation test")
     public HomePage verifySocialLinkNavigationTest(String expectedLink) {
         List<String> browserTabs = new ArrayList<>(driver.getWindowHandles());
         driver.switchTo().window(browserTabs.get(1));

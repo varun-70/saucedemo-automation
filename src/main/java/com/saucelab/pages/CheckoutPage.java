@@ -1,5 +1,6 @@
 package com.saucelab.pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -12,121 +13,132 @@ public class CheckoutPage {
 
     // Declaration -----------------------------------------------
     @FindBy(id = "first-name")
-    WebElement firstNameTextField;
+    private WebElement firstNameTextField;
 
     @FindBy(id = "last-name")
-    WebElement lastNameTextField;
+    private WebElement lastNameTextField;
 
     @FindBy(id = "postal-code")
-    WebElement postalCodeTextField;
+    private WebElement postalCodeTextField;
 
     @FindBy(css = "span[class='title']")
-    WebElement pageTitle;
+    private WebElement pageTitle;
 
     @FindBy(id = "cancel")
-    WebElement cancelButton;
+    private WebElement cancelButton;
 
     @FindBy(id = "continue")
-    WebElement continueButton;
+    private WebElement continueButton;
 
     @FindBy(id = "finish")
-    WebElement finishButton;
+    private WebElement finishButton;
 
     @FindBy(id = "back-to-products")
-    WebElement backHomeButton;
+    private WebElement backHomeButton;
 
     @FindBy(id = "checkout")
-    WebElement checkoutButton;
+    private WebElement checkoutButton;
 
     @FindBy(css = "h3[data-test='error']")
-    WebElement errorMessage;
+    private WebElement errorMessage;
 
     @FindBy(xpath = "//button[@class='error-button']")
-    WebElement errorCloseIcon;
+    private WebElement errorCloseIcon;
 
     @FindBy(css = "div[class='summary_value_label']")
-    WebElement paymentInformation;
+    private WebElement paymentInformation;
 
     @FindBy(xpath = "(//div[@class='summary_value_label'])[2]")
-    WebElement shippingInformation;
+    private WebElement shippingInformation;
 
     @FindBy(css = "div[class='summary_subtotal_label']")
-    WebElement subTotalPriceWithoutTax;
+    private WebElement subTotalPriceWithoutTax;
 
     @FindBy(css = "div[class='summary_tax_label']")
-    WebElement taxPrice;
+    private WebElement taxPrice;
 
     @FindBy(css = "div[class='summary_info_label summary_total_label']")
-    WebElement totalPrice;
+    private WebElement totalPrice;
 
     @FindBy(css = "div[class='inventory_item_price']")
-    List<WebElement> itemPrices;
+    private List<WebElement> itemPrices;
 
     @FindBy(css = "img[class='pony_express']")
     public WebElement orderCompletedIcon;
 
     @FindBy(css = "h2[class='complete-header']")
-    WebElement orderCompletedHeader;
+    private WebElement orderCompletedHeader;
 
     @FindBy(css = "div[class='complete-text']")
-    WebElement orderCompletedText;
+    private WebElement orderCompletedText;
 
     // Utilization ---------------------------------------------
 
+    @Step("Click cancel button")
     public CheckoutPage clickCancelButton() {
         cancelButton.click();
         return this;
     }
 
+    @Step("Click continue button")
     public CheckoutPage clickContinueButton() {
         continueButton.click();
         return this;
     }
 
+    @Step("Click finish button")
     public CheckoutPage clickFinishButton() {
         finishButton.click();
         return this;
     }
 
+    @Step("Click back home button")
     public CheckoutPage clickBackHomeButton() {
         backHomeButton.click();
         return this;
     }
 
+    @Step("Click error close icon")
     public CheckoutPage clickErrorCloseIcon() {
         errorCloseIcon.click();
         return this;
     }
 
+    @Step("Click check out button")
     public CheckoutPage clickCheckoutButton() {
         checkoutButton.click();
         return this;
     }
 
+    @Step("Enter first name")
     public CheckoutPage setFirstNameTextField(String firstName) {
         firstNameTextField.clear();
         firstNameTextField.sendKeys(firstName);
         return this;
     }
 
+    @Step("Enter last name")
     public CheckoutPage setLastNameTextField(String lastName) {
         lastNameTextField.clear();
         lastNameTextField.sendKeys(lastName);
         return this;
     }
 
+    @Step("Enter postal code")
     public CheckoutPage setPostalCodeTextField(String postalCode) {
         postalCodeTextField.clear();
         postalCodeTextField.sendKeys(postalCode);
         return this;
     }
 
+    @Step("Verify error message")
     public CheckoutPage verifyErrorMessage(String expectedMessage) {
         Assert.assertEquals(errorMessage.getText(), expectedMessage);
         return this;
     }
 
-    public CheckoutPage getOrderCompletedHeader(String expectedText) {
+    @Step("Verify order completed header")
+    public CheckoutPage verifyOrderCompletedHeader(String expectedText) {
         Assert.assertEquals(orderCompletedHeader.getText(), expectedText);
         return this;
     }
@@ -146,21 +158,25 @@ public class CheckoutPage {
             return false;
     }
 
+    @Step("Verify page title")
     public CheckoutPage assertPageTitle(pageTitles pageTitles) {
         Assert.assertEquals(pageTitle.getText(), pageTitles.getValue());
         return this;
     }
 
+    @Step("Verify payment information")
     public CheckoutPage assertPaymentInformation() {
         Assert.assertEquals(paymentInformation.getText(), "SauceCard #31337");
         return this;
     }
 
+    @Step("Verify shipping information")
     public CheckoutPage assertShippingInformation() {
         Assert.assertEquals(shippingInformation.getText(), "Free Pony Express Delivery!");
         return this;
     }
 
+    @Step("Verify sub total price")
     public CheckoutPage assertSubTotalPrice() {
         double subTotalPriceExpected = getItemPrice();
         double subTotalPriceActual = Double.parseDouble(subTotalPriceWithoutTax.getText().substring(13));
@@ -168,6 +184,7 @@ public class CheckoutPage {
         return this;
     }
 
+    @Step("Verify tax price")
     public CheckoutPage assertTaxPrice() {
         double itemPrice = getItemPrice();
         double taxPriceExpected = Math.round((itemPrice * 0.08) * 100.0) / 100.0;
@@ -177,6 +194,7 @@ public class CheckoutPage {
         return this;
     }
 
+    @Step("Verify total price")
     public CheckoutPage assertTotalPrice() {
         double itemPrice = getItemPrice();
         double taxRoundOff = Math.round((itemPrice * 0.08) * 100.0) / 100.0;

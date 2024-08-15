@@ -1,23 +1,16 @@
 package com.saucelab.testcases;
 
-import com.saucelab.annotaions.Login;
+import com.saucelab.annotations.Login;
 import com.saucelab.base.BaseTest;
 import com.saucelab.constants.Constants;
+import com.saucelab.pages.HomePage;
+import com.saucelab.util.ImageComparison;
+import com.saucelab.util.NavigationToScreensUtil;
 import io.qameta.allure.Epic;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import org.testng.asserts.SoftAssert;
-import com.saucelab.pages.HomePage;
-import com.saucelab.util.HelperUtil;
-import com.saucelab.util.ImageComparison;
-import com.saucelab.util.NavigationToScreensUtil;
-
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 
 @Epic("Home")
 public class HomeScreenTestCase extends BaseTest {
@@ -25,7 +18,7 @@ public class HomeScreenTestCase extends BaseTest {
     ThreadLocal<ImageComparison> imageComparison = new ThreadLocal<>();
     ThreadLocal<NavigationToScreensUtil> navigationToScreensUtil = new ThreadLocal<>();
 
-    @BeforeClass
+    @BeforeMethod(alwaysRun = true, description = "Initialize")
     void initialize() {
         homePage.set(new HomePage(driver.get()));
         imageComparison.set(new ImageComparison(driver.get()));
@@ -40,7 +33,7 @@ public class HomeScreenTestCase extends BaseTest {
     }
 
     /** To perform visual assertion on the shopping cart with and without any items in cart, and social links */
-    @Test
+    @Test(description = "Visual image comparison test")
     @Login
     public void visualTest() {
         imageComparison.get().imageComparisonAshot(ImageComparison.imageName.cart_icon_without_items_in_cart.toString(), homePage.get().linkShoppingCart);
@@ -51,7 +44,7 @@ public class HomeScreenTestCase extends BaseTest {
         imageComparison.get().imageComparisonAshot(ImageComparison.imageName.linkedin_social_icon.toString(), homePage.get().linkedInSocialLink);
     }
 
-    @Test
+    @Test(description = "Add to cart test")
     @Login
     public void addToCartTest() {
         int addToCartButtonsCount = homePage.get().addToCartButton.size();
@@ -72,7 +65,7 @@ public class HomeScreenTestCase extends BaseTest {
         homePage.get().clickContinueShoppingButton();
     }
 
-    @Test
+    @Test(description = "Direct URL navigation test")
     @Login
     public void directUrlNavigationTest() {
         driver.get().manage().deleteAllCookies();
@@ -80,7 +73,7 @@ public class HomeScreenTestCase extends BaseTest {
         homePage.get().assertWrongNavigationError();
     }
 
-    @Test
+    @Test(description = "Verify sorting product items on home")
     @Login
     public void sorting() {
         homePage.get().setSortingDropDown(HomePage.sorting.Name_A_to_Z)
@@ -93,7 +86,7 @@ public class HomeScreenTestCase extends BaseTest {
                 .asserSortByPrice(HomePage.sorting.Price_high_to_low);
     }
 
-    @Test
+    @Test(description = "Social link navigation test")
     @Login
     public void socialLinkNavigationTest() {
         homePage.get().clickTwitterSocialLink()
@@ -104,7 +97,7 @@ public class HomeScreenTestCase extends BaseTest {
                 .verifySocialLinkNavigationTest(Constants.LINKEDIN_LINK);
     }
 
-    @Test
+    @Test(description = "Verify copy right label test")
     @Login
     public void copyRightLabelTest() {
         homePage.get().assertCopyRightLabel();

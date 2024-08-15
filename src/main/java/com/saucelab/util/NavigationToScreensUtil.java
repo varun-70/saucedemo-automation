@@ -1,11 +1,11 @@
 package com.saucelab.util;
 
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import com.saucelab.pages.CartPage;
 import com.saucelab.pages.CheckoutPage;
 import com.saucelab.pages.HomePage;
 import com.saucelab.pages.LoginPage;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 
 import java.time.Duration;
 
@@ -82,7 +82,7 @@ public class NavigationToScreensUtil {
     void login() {
         loginPage.setUsernametextfield("standard_user");
         loginPage.setPasswordtextfield("secret_sauce");
-        loginPage.tapLoginButton();
+        loginPage.clickLoginButton();
     }
 
     void addProductToCartAndCheckout() {

@@ -13,7 +13,7 @@ import org.testng.ITestResult;
 public class SkipToCheckoutYourInformationListeners implements IInvokedMethodListener {
     @Override
     public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
-        if (method.isTestMethod() && method.getTestMethod().getConstructorOrMethod().getMethod().isAnnotationPresent(com.saucelab.annotaions.SkipToCheckoutYourInformation.class)) {
+        if (method.isTestMethod() && method.getTestMethod().getConstructorOrMethod().getMethod().isAnnotationPresent(com.saucelab.annotations.SkipToCheckoutYourInformation.class)) {
             skipToCheckoutYourInformationListeners();
         }
     }
@@ -26,7 +26,7 @@ public class SkipToCheckoutYourInformationListeners implements IInvokedMethodLis
 
         loginPage.setUsernametextfield(Constants.STANDARD_USER)
                 .setPasswordtextfield(Constants.PASSWORD)
-                .tapLoginButton();
+                .clickLoginButton();
         homePage.addItemsToCart(0)
                 .clickShoppingCartLink();
         cartPage.clickCheckoutButton();
