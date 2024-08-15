@@ -1,15 +1,14 @@
 package com.saucelab.testcases;
 
 import com.saucelab.base.BaseTest;
-import io.qameta.allure.Epic;
-import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 import com.saucelab.pages.CartPage;
 import com.saucelab.pages.HomePage;
 import com.saucelab.util.NavigationToScreensUtil;
+import io.qameta.allure.Epic;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 @Epic("Cart")
 public class CartTestCase extends BaseTest {
@@ -18,7 +17,7 @@ public class CartTestCase extends BaseTest {
     ThreadLocal<HomeScreenTestCase> homeScreenTestCase = new ThreadLocal<>();
     ThreadLocal<NavigationToScreensUtil> navigationToScreensUtil = new ThreadLocal<>();
 
-    @BeforeClass
+    @BeforeMethod(alwaysRun = true, description = "Initialize")
     void initialize() {
         cartPage.set(new CartPage(driver.get()));
         homePage.set(new HomePage(driver.get()));
@@ -40,7 +39,7 @@ public class CartTestCase extends BaseTest {
         navigationToScreensUtil.remove();
     }
 
-    @Test
+    @Test(description = "Verify product items order and there price on the cart")
     public void itemOrderAndPriceInCartTest() {
         cartPage.get().clickContinueShoppingButton();
 
@@ -67,27 +66,25 @@ public class CartTestCase extends BaseTest {
         }
     }
 
-    @Test
-    void removeItemsTest() {
+    @Test(description = "Remove product items from the cart test")
+    void removeProductItemsFromCartTest() {
         cartPage.get().verifyNumberOfItemsInCart(0)
                 .clickContinueShoppingButton();
         homePage.get().addItemsToCart(3);
         cartPage.get().removeItemsFromCart(3);
     }
 
-    @Test
+    @Test(description = "Verify navigation test ")
     void navigationTest() {
         cartPage.get().clickContinueShoppingButton();
-        homePage.get().productsText.isDisplayed();
-
-        homePage.get().clickItemName(0)
-                        .clickShoppingCartLink();
-        homePage.get().clickShoppingCartLink();
+        homePage.get().verifyProductsTextIsDisplayed()
+                .clickItemName(0)
+                .clickShoppingCartLink();
         cartPage.get().clickContinueShoppingButton();
-        homePage.get().productsText.isDisplayed();
+        homePage.get().verifyProductsTextIsDisplayed();
     }
 
-    @Test
+    @Test(description = "Verify social links")
     void socialLinkNavigationTest() {
         homeScreenTestCase.get().socialLinkNavigationTest();
     }

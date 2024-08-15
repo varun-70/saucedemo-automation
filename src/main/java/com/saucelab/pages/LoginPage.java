@@ -1,5 +1,6 @@
 package com.saucelab.pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -33,22 +34,26 @@ public class LoginPage {
         return headertext.getText();
     }
 
+    @Step("Verify header text")
     public LoginPage verifyHeaderText(String expectedResult) {
         Assert.assertEquals(headertext.getText(), expectedResult);
         return this;
     }
 
+    @Step("Enter username")
     public LoginPage setUsernametextfield(String username) {
         usernametextfield.sendKeys(username);
         return this;
     }
 
+    @Step("Enter password")
     public LoginPage setPasswordtextfield(String password) {
         passwordtextfield.sendKeys(password);
         return this;
     }
 
-    public LoginPage tapLoginButton() {
+    @Step("Click login button")
+    public LoginPage clickLoginButton() {
         loginbutton.click();
         return this;
     }

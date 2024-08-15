@@ -92,3 +92,16 @@ The project uses Allure for test reporting. After running the pageTests, you can
    allure generate -c --single-file allure-results --report-name Allure Report - Firefox
    ```
 
+### Report Screenshots
+
+|  |  |
+| ----- | ------ |
+| ![img.png](docs/images/allureReporting/img_01.png) | ![img_1.png](docs/images/allureReporting/img_02.png)    |
+| ![img_2.png](docs/images/allureReporting/img_03.png) | ![img_3.png](docs/images/allureReporting/img_04.png)   |
+
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-package com.saucelab.annotaions;
+package com.saucelab.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

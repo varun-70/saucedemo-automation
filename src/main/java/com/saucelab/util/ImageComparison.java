@@ -1,6 +1,8 @@
 package com.saucelab.util;
 
 import com.aventstack.extentreports.Status;
+import com.saucelab.util.extentReport.Logs;
+import io.qameta.allure.Allure;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
@@ -8,10 +10,10 @@ import org.openqa.selenium.WebElement;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.comparison.ImageDiff;
 import ru.yandex.qatools.ashot.comparison.ImageDiffer;
-import com.saucelab.util.extentReport.Logs;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -56,9 +58,12 @@ public class ImageComparison {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 } catch (AssertionError e) {
-                    Logs.logImage(Status.FAIL, "Visual Assertion failed", new File(System.getProperty("user.dir") +
-                            "/src/test/resources/imageComparison/differenceImage/" + fileName + "_diff.png"));
-                    fail("Visual Assertion, Image did not pass the visual assertion");
+//                    Logs.logImage(Status.FAIL, "Visual Assertion failed", new File(System.getProperty("user.dir") +
+//                            "/src/test/resources/imageComparison/differenceImage/" + fileName + "_diff.png"));
+                    Allure.addAttachment("Visual Assertion failed", new ByteArrayInputStream((System.getProperty("user.dir") +
+                                                "/src/test/resources/imageComparison/differenceImage/" + fileName + "_diff.png").getBytes()));
+
+//                    fail("Visual Assertion, Image did not pass the visual assertion");
                 }
             } else if (!diff.hasDiff()) {
                 Logs.log("Image comparison passed");

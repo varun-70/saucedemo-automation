@@ -1,6 +1,6 @@
 package com.saucelab.listeners;
 
-import com.saucelab.annotaions.Login;
+import com.saucelab.annotations.Login;
 import com.saucelab.base.BaseTest;
 import com.saucelab.constants.Constants;
 import com.saucelab.pages.LoginPage;
@@ -47,6 +47,6 @@ public class LoginListener implements IInvokedMethodListener {
         LoginPage loginPage = new LoginPage(driver);
         loginPage.setUsernametextfield(Constants.STANDARD_USER)
                 .setPasswordtextfield(Constants.PASSWORD)
-                .tapLoginButton();
+                .clickLoginButton();
     }
 }
