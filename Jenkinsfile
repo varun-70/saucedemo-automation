@@ -7,6 +7,11 @@ pipeline {
         jdk 'jdk_17'
     }
 
+    environment {
+        JAVA_HOME = "${tool 'jdk_17'}"
+        PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
+    }
+
     stages {
         stage('Checkout Code') {
             steps {
