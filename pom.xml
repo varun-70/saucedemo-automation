@@ -13,10 +13,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
-        <aspectj.version>1.9.19</aspectj.version>
+        <aspectj.version>1.9.20.1</aspectj.version>
         <allure.version>2.22.0</allure.version>
         <suiteXmlFile>suites/smote_testng.xml</suiteXmlFile>
-        <aspectj.version>1.9.20.1</aspectj.version>
     </properties>
 
     <build>
@@ -35,6 +34,10 @@
                         <source>11</source>
                         <target>11</target>
                         <encoding>UTF-8</encoding>
+                        <compilerArgs>
+                            <arg>--add-opens</arg>
+                            <arg>jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</arg>
+                        </compilerArgs>
                     </configuration>
                 </plugin>
                 <plugin>
