@@ -4,7 +4,7 @@ pipeline {
     tools {
         // Install Maven using a Maven installer tool
         maven 'Maven_3.9.8',
-        jdk: 'jdk_17'
+        jdk 'jdk_17'
     }
 
     stages {
