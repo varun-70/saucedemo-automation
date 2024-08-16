@@ -4,12 +4,6 @@ pipeline {
     tools {
         // Install Maven using a Maven installer tool
         maven 'Maven_3.9.8'
-        jdk 'jdk_17'
-    }
-
-    environment {
-        JAVA_HOME = "${tool 'jdk_17'}"
-        PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
     }
 
     stages {
@@ -42,7 +36,7 @@ pipeline {
     post {
         always {
             allure includeProperties: true,
-                       jdk: 'jdk_17',
+                       jdk: '',
                        results: [
                             [path: 'build/allure-results-firefox'],
                             [path: 'build/allure-results-chrome'],
