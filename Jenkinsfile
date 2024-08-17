@@ -16,13 +16,13 @@ pipeline {
         }
         stage('Run Firefox Tests') {
             steps {
-                sh 'mvn clean test -e -X -DsuiteXmlFile=suites/smoke_testng.xml -Dbrowser=firefox -Dallure.results.directory=build/allure-results-firefox'
+                sh 'mvn clean test -DsuiteXmlFile=suites/smoke_testng.xml -Dbrowser=firefox -Dallure.results.directory=build/allure-results-firefox'
             }
         }
 
         stage('Run Chrome Tests') {
             steps {
-                sh 'mvn clean test -e -X -DsuiteXmlFile=suites/smoke_testng.xml -Dbrowser=chrome -Dallure.results.directory=build/allure-results-chrome'
+                sh 'mvn clean test -DsuiteXmlFile=suites/smoke_testng.xml -Dbrowser=chrome -Dallure.results.directory=build/allure-results-chrome'
             }
         }
 
