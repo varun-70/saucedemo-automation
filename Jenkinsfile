@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         // Install Maven using a Maven installer tool
-        mavenInstaller(mavenVersion: '3.9.8')
+        maven 'Maven_3.9.8'
     }
 
     stages {
@@ -26,11 +26,11 @@ pipeline {
             }
         }
 
-        stage('Run Safari Tests') {
-            steps {
-                sh 'mvn clean test -DsuiteXmlFile=suites/smoke_testng.xml -Dbrowser=safari -Dallure.results.directory=build/allure-results-safari'
-            }
-        }
+//         stage('Run Edge Tests') {
+//             steps {
+//                 sh 'mvn clean test -DsuiteXmlFile=suites/smoke_testng.xml -Dbrowser=edge -Dallure.results.directory=build/allure-results-edge'
+//             }
+//         }
     }
 
     post {
